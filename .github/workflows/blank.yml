@@ -36,6 +36,6 @@ jobs:
           rl-portal-group: Default
           rl-timeout: 20
           rl-submit-only: false
-          artifact-to-scan: ${{ steps.build.outputs.scanfile }}
+          artifact-to-scan: README.md
           report-path: MyReportsDirectory
           rl-package-url: my-project/my-package@1.0
