@@ -1,5 +1,5 @@
-name: ReversingLabs rl-scanner-cloud only
-run-name: rl-scanner-cloud-only
+name: ReversingLabs rl-scanner-cloud
+run-name: rl-scanner-cloud-composite
 
 on:
   push:
@@ -8,32 +8,34 @@ on:
     branches: [ "main" ]
 
 jobs:
-  checkout-build-scan-only:
+  checkout-build-scan-action:
     runs-on: ubuntu-latest
+
     permissions:
       statuses: write
       pull-requests: write
+      # The next 3 permissions are used for SARIF report upload
+      security-events: write
+      actions: read
+      contents: read
 
     steps:
       # Need to check out data before we can do anything
       - uses: actions/checkout@v4
 
-      # Use the rl-scanner-cloud-only action
+      # Use the rl-scanner-cloud-composite action
       - name: Scan build artifact on the Portal
         id: rl-scan
         env:
           RLPORTAL_ACCESS_TOKEN: ${{ secrets.RLPORTAL_ACCESS_TOKEN }}
-        uses: reversinglabs/gh-action-rl-scanner-cloud-only@v1.0.4
+        uses: reversinglabs/gh-action-rl-scanner-cloud-composite@v1
         with:
-          artifact-to-scan: README.md
           rl-verbose: true
           rl-portal-server: test
           rl-portal-org: Test
           rl-portal-group: Default
+          rl-timeout: 20
+          rl-submit-only: false
+          artifact-to-scan: README.md
+          report-path: MyReportsDirectory
           rl-package-url: my-project/my-package@1.0
-
-      - name: report the scan status
-        if: success() || failure()
-        run: |
-          echo "The status is: '${{ steps.rl-scan.outputs.status }}'"
-          echo "The description is: '${{ steps.rl-scan.outputs.description }}'"
