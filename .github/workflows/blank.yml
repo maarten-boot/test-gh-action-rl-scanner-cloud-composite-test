@@ -23,7 +23,7 @@ jobs:
         id: rl-scan
         env:
           RLPORTAL_ACCESS_TOKEN: ${{ secrets.RLPORTAL_ACCESS_TOKEN }}
-        uses: reversinglabs/gh-action-rl-scanner-cloud-only@v1
+        uses: reversinglabs/gh-action-rl-scanner-cloud-only@v1.0.4
         with:
           artifact-to-scan: README.md
           rl-verbose: true
